@@ -1,7 +1,7 @@
 # Fuck LinkedIn's Feed
 
-Fuck LinkedIn's Feed is a minimal browser extension that removes the
-LinkedIn feed. It works on both Chrome and Firefox.
+A minimal browser extension that removes the LinkedIn feed. It works on both
+Chrome and Firefox.
 
 ## Installation
 
@@ -15,8 +15,8 @@ and install it via `about:addons` → gear icon → **Install Add-on From File..
 
 Download the latest `.zip` from the
 [releases page](https://github.com/mahyarmirrashed/fuck-linkedin-feed/releases),
-extract it, then load it via `chrome://extensions` with **Developer Mode** enabled
-→ **Load unpacked**.
+extract it, then load it via `chrome://extensions` with **Developer Mode**
+enabled → **Load unpacked**.
 
 ## License
 
