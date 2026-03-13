@@ -1,27 +1,36 @@
-dist := "dist"
+set dotenv-load
 
-# Build both Chrome and Firefox targets
+# Build all the browser extensions
 build: build-chrome build-firefox
 
-# Build Chrome extension (.zip)
+# Build the Chrome extension (.zip)
 build-chrome:
-    mkdir -p {{dist}}
-    zip -j {{dist}}/fuck-linkedin-feed.zip \
+    mkdir -p dist
+    zip -j dist/fuck-linkedin-feed.zip \
         manifest.json content.js \
         icon-16.png icon-48.png icon-128.png
 
-# Build Firefox extension (.xpi)
+# Build the Firefox extension (.xpi)
 build-firefox: build-chrome
-    cp {{dist}}/fuck-linkedin-feed.zip {{dist}}/fuck-linkedin-feed.xpi
+    cp dist/fuck-linkedin-feed.zip dist/fuck-linkedin-feed.xpi
 
-# Lint with web-ext
+# Validate the extension manifest and source
 lint:
     web-ext lint --source-dir .
 
-# Run in Firefox for testing
+# Launch a browser instance with the extension loaded
 run:
     web-ext run --source-dir .
 
-# Remove build artifacts
+# Sign the extension for distribution
+sign:
+    web-ext sign \
+        --source-dir . \
+        --channel unlisted \
+        --api-key $AMO_API_KEY \
+        --api-secret $AMO_API_SECRET \
+        --artifacts-dir dist
+
+# Remove the build artifacts
 clean:
-    rm -rf {{dist}}
+    rm -rf dist
