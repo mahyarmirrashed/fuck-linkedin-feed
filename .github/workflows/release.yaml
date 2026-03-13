@@ -1,0 +1,44 @@
+name: Release
+on:
+  push:
+    branches: [main]
+    paths: [manifest.json]
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check tag does not already exist
+        run: |
+          VERSION=$(jq -r '.version' manifest.json)
+          if git ls-remote --tags origin | grep -q "refs/tags/v${VERSION}$"; then
+            echo "Tag v${VERSION} already exists."
+            exit 1
+          fi
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+      - name: Build
+        run: nix develop --command just build
+      - name: Sign
+        env:
+          AMO_API_KEY: ${{ secrets.AMO_API_KEY }}
+          AMO_API_SECRET: ${{ secrets.AMO_API_SECRET }}
+        run: nix develop --command just sign
+      - name: Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(jq -r '.version' manifest.json)
+          XPI=$(ls dist/*-${VERSION}.xpi)
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "v${VERSION}"
+          git push origin "v${VERSION}"
+          gh release create "v${VERSION}" \
+            --title "v${VERSION}" \
+            --generate-notes \
+            "${XPI}#Firefox extension (signed .xpi)" \
+            "dist/fuck-linkedin-feed.zip#Chrome extension (.zip)"
