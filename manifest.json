@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Fuck LinkedIn's Feed",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Removes the LinkedIn feed.",
   "icons": {
     "16": "icon-16.png",
