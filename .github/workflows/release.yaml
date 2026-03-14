@@ -34,6 +34,7 @@ jobs:
           VERSION=$(jq -r '.version' manifest.json)
           XPI=$(ls dist/*-${VERSION}.xpi)
           mv "$XPI" dist/fuck-linkedin-feed-${VERSION}.xpi
+          mv dist/fuck-linkedin-feed.zip dist/fuck-linkedin-feed-${VERSION}.zip
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag "v${VERSION}"
@@ -42,4 +43,4 @@ jobs:
             --title "v${VERSION}" \
             --generate-notes \
             "dist/fuck-linkedin-feed-${VERSION}.xpi" \
-            "dist/fuck-linkedin-feed.zip"
+            "dist/fuck-linkedin-feed-${VERSION}.zip"
